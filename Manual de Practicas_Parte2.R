@@ -56,7 +56,7 @@ cat("División entera:", div_entera, "\n")
 calificaciones <- c(85, 92, 78, 64, 89)
 
 # Vector de tipo carácter (Nombres de alumnos)
-alumnos <- c("Ana", "Carlos", "Sofía", "Luis", "Elena")
+alumnos <- c("Ana", "Alberto", "Patricia", "Gerardo", "Rafael")
 
 # Vectorización: operación directa sobre todos los elementos
 calificaciones_curvadas <- calificaciones + 3
