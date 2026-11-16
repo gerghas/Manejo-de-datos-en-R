@@ -142,3 +142,118 @@ while (control_evaluacion > 0) {
 cat("Proceso de validación finalizado.\n")
 
 -----------------------------------------------------------------------------------------------------------
+
+# --- 2.7. Listas
+# --- Dando continuidad a las estructuras de datos en R base, una lista (list) es la estructura más 
+# --- flexible del lenguaje. A diferencia de los vectores, permite agrupar elementos de diferentes tipos y 
+# --- longitudes (escalares, vectores, valores lógicos o incluso otras listas) dentro de un mismo objeto.
+
+# Creación de una lista heterogénea integrando variables y vectores previos
+expediente_grupo <- list(
+  materia = nombre_curso,
+  posgrado = "Maestría en Inteligencia Artificial",
+  alumnos_inscritos = alumnos,
+  calificaciones_base = calificaciones,
+  activo = estatus_activo
+)
+
+# Acceso a los elementos de la lista (mediante $ o dobles corchetes [[]])
+print(expediente_grupo$materia)
+print(expediente_grupo[["alumnos_inscritos"]][4]) # Accede a "Gerardo"
+
+# Agregar dinámicamente un nuevo elemento a la lista
+expediente_grupo$promedio_grupo <- mean(calificaciones)
+cat("Promedio general registrado en lista:", expediente_grupo$promedio_grupo, "\n")
+
+-----------------------------------------------------------------------------------------------------------
+
+# --- 2.8. Matrices
+# --- Una matriz (matrix) es una estructura bidimensional (organizada en filas y columnas) en la que 
+# --- todos los elementos deben ser del mismo tipo (generalmente numérico). Se construyen mediante la 
+# --- función nativa matrix() y permiten realizar cálculos algebraicos y estadísticos por dimensión.
+
+# Calificaciones de 3 unidades evaluadas para los 5 alumnos (15 datos en total)
+notas_unidades <- c(85, 88, 90,   # Ana
+                    92, 90, 94,   # Alberto
+                    78, 80, 82,   # Patricia
+                    64, 70, 68,   # Gerardo
+                    89, 91, 93)   # Rafael
+
+# Creación de la matriz (5 filas x 3 columnas, llenado por fila)
+matriz_calificaciones <- matrix(notas_unidades, nrow = 5, ncol = 3, byrow = TRUE)
+
+# Asignación de nombres a filas (usando el vector 'alumnos') y columnas
+rownames(matriz_calificaciones) <- alumnos
+colnames(matriz_calificaciones) <- c("Unidad_1", "Unidad_2", "Unidad_3")
+
+# Inspección y operaciones matriciales en R base
+print(matriz_calificaciones)
+
+# Calcular el promedio por alumno (filas) y por unidad (columnas)
+promedio_alumno <- rowMeans(matriz_calificaciones)
+promedio_unidad <- colMeans(matriz_calificaciones)
+
+print(promedio_alumno)
+print(promedio_unidad)
+
+-----------------------------------------------------------------------------------------------------------
+
+# --- 2.9. Data Frames
+# --- El data.frame es la estructura tabular fundamental para el análisis de datos y el aprendizaje 
+# --- automático en R. Internamente opera como una lista de vectores de igual longitud, lo que permite 
+# --- que cada columna almacene un tipo de dato distinto (texto, numérico, lógico).
+
+# Creación del Data Frame integrando vectores y promedios calculados
+df_alumnos <- data.frame(
+  Matricula = 202601:202605,
+  Alumno = alumnos,
+  Edad = c(24, 26, 23, 27, 25),
+  Promedio_Final = round(promedio_alumno, 1),
+  Aprobado = promedio_alumno >= 70,
+  stringsAsFactors = FALSE
+)
+
+# Exploración de la estructura y resumen estadístico con R base
+str(df_alumnos)
+summary(df_alumnos)
+
+# Filtrado y subconjuntos (Subsetting) usando operadores lógicos
+alumnos_destacados <- df_alumnos[df_alumnos$Promedio_Final >= 85, c("Alumno", "Promedio_Final")]
+print(alumnos_destacados)
+
+-----------------------------------------------------------------------------------------------------------
+
+# --- 2.10. Markdown
+# --- R Markdown (extensión .Rmd) integra texto narrativo formateado en Markdown con bloques de 
+# --- código R (chunks) delimitados por ```{r}. Al compilar el documento (proceso conocido como Knit), 
+# --- R ejecuta las instrucciones e incrusta los resultados directamente en un reporte 
+# --- final (HTML, PDF o Word), garantizando reproducibilidad científica.
+
+# --- Ubicación y activación del botón Knit en RStudio:
+# --- El botón Knit (que tiene el icono de un ovillo de lana azul) se encuentra en la barra de 
+# --- herramientas superior del panel de edición de código (arriba a la izquierda, justo encima de donde 
+# --- escribes tu texto). Si a veces no aparece o está deshabilitado, se debe a una de estas razones comunes:
+
+# --- Cómo encontrarlo o habilitarlo: Verifica que el archivo esté guardado con la extensión correcta. 
+# --- Si tu pestaña dice algo como Untitled1 o el archivo tiene extensión .R (en lugar de .Rmd), RStudio 
+# --- no mostrará el botón Knit.
+
+# --- Solución: Ve a File > Save As... y asegúrate de guardarlo exactamente con el nombre reporte.Rmd.
+
+# --- A continuación se documenta el ejemplo funcional de un bloque en .Rmd utilizando exclusivamente 
+# --- código nativo de R base:
+
+## Resumen de Desempeño Académico
+
+En el siguiente bloque se procesan los registros de los alumnos mediante R base:
+
+```{r resumen_grupo, echo=TRUE}
+# Definición de datos en R base
+alumnos <- c("Ana", "Alberto", "Patricia", "Gerardo", "Rafael")
+promedios <- c(87.7, 92.0, 80.0, 67.3, 91.0)
+tabla_resultados <- data.frame(Alumno = alumnos, Promedio = promedios)
+
+# Mostrar tabla en el reporte
+print(tabla_resultados)
+```
+-----------------------------------------------------------------------------------------------------------
